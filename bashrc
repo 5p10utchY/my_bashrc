@@ -56,11 +56,49 @@ if [ -n "$force_color_prompt" ]; then
     fi
 fi
 
+##
+##-- PROMPT --
+##
+
+## PROMPT COLOURS
+#BLACK='\e[0;30m'      # Black - Regular
+#RED='\e[0;31m'        # Red
+#GREEN='\e[0;32m'      # Green
+#YELLOW='\e[0;33m'     # Yellow
+#BLUE='\e[0;34m'       # Blue
+#PURPLE='\e[0;35m'     # Purple
+#CYAN='\e[0;36m'       # Cyan
+#WHITE='\e[0;37m'      # White
+#BLACK_BOLD='\e[1;30m'   # Black - Bold
+#RED_BOLD='\e[1;31m'     # Red - Bold
+#GREEN_BOLD='\e[1;32m'   # Green - Bold
+#YELLOW_BOLD='\e[1;33m'  # Yellow - Bold
+#BLUE_BOLD='\e[1;34m'    # Blue - Bold
+#PURPLE_BOLD='\e[1;35m'  # Purple - Bold
+#CYAN_BOLD='\e[1;36m'    # Cyan - Bold
+#WHITE_BOLD='\e[1;37m'   # White - Bold
+#RESET='\e[0m'         # Text Reset
+
+
 #if [ "$color_prompt" = yes ]; then
 #    PS1='${debian_chroot:+($debian_chroot)}\[\033[01;32m\]\u@\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]\$ '
 #else
 #    PS1='${debian_chroot:+($debian_chroot)}\u@\h:\w\$ '
 #fi
+
+#parse_git_branch() {
+#  if git rev-parse --is-inside-work-tree &> /dev/null; then
+#    local BRANCH=$(git symbolic-ref --short HEAD 2> /dev/null)
+#    if [[ -n "$BRANCH" ]]; then
+#      echo "($BRANCH)"
+#    fi
+#  else
+#    return 0  # Ne rien faire si on n'est pas dans un dépôt Git
+#  fi
+#}
+parse_git_branch() {
+     git branch 2> /dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/ (\1)/'
+}
 
 ##-- Ajout Openstack d'Infomaniak
 ## like git ps1 for openstack
@@ -77,9 +115,9 @@ __openstack_ps1()
 
 ##--- Ajout de Parrot OS ---
 if [ "$color_prompt" = yes ]; then
-    PS1="\[\033[0;31m\]\342\224\214\342\224\200\$([[ \$? != 0 ]] && echo \"[\[\033[0;31m\]\342\234\227\[\033[0;37m\]]\342\224\200\")[$(if [[ ${EUID} == 0 ]]; then echo '\[\033[01;31m\]root\[\033[01;33m\]@\[\033[01;96m\]\h'; else echo '\[\033[0;39m\]\u\[\033[01;33m\]@\[\033[01;96m\]\h'; fi)\[\033[0;31m\]]\342\224\200[\[\033[0;32m\]\w\[\033[0;31m\]]\[\033[01;33m\]\$(__openstack_ps1)\[\e[38;5;2m\]$(__git_ps1)\[\033[0;39m\] \n\[\033[0;31m\]\342\224\224\342\224\200\342\224\200\342\225\274 \[\033[0m\]\[\e[01;33m\]\\$\[\e[0m\] "
+    PS1="\[\033[0;31m\]\342\224\214\342\224\200\$([[ \$? != 0 ]] && echo \"[\[\033[0;31m\]\342\234\227\[\033[0;37m\]]\342\224\200\")[$(if [[ ${EUID} == 0 ]]; then echo '\[\033[01;31m\]root\[\033[01;33m\]@\[\033[01;96m\]\h'; else echo '\[\033[0;39m\]\u\[\033[01;33m\]@\[\033[01;96m\]\h'; fi)\[\033[0;31m\]]\342\224\200[\[\033[0;32m\]\w\[\033[0;31m\]]\[\033[01;33m\]\$(__openstack_ps1)\[\e[38;5;2m\]$(parse_git_branch)\[\033[0;39m\] \n\[\033[0;31m\]\342\224\224\342\224\200\342\224\200\342\225\274 \[\033[0m\]\[\e[01;33m\]\\$\[\e[0m\] "
 else
-    PS1='┌──[\u@\h]─[\w]$(__openstack_ps1)\[\e[38;5;2m\]$(__git_ps1)\n└──╼ \$ '
+    PS1='┌──[\u@\h]─[\w]$(__openstack_ps1)\[\e[38;5;2m\]$(parse_git_branch)\n└──╼ \$ '
 fi
 
 # Set 'man' colors
