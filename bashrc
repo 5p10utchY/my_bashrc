@@ -43,16 +43,16 @@ esac
 # uncomment for a colored prompt, if the terminal has the capability; turned
 # off by default to not distract the user: the focus in a terminal window
 # should be on the output of commands, not on the prompt
-#force_color_prompt=yes
+force_color_prompt=yes
 
 if [ -n "$force_color_prompt" ]; then
     if [ -x /usr/bin/tput ] && tput setaf 1 >&/dev/null; then
-	# We have color support; assume it's compliant with Ecma-48
-	# (ISO/IEC-6429). (Lack of such support is extremely rare, and such
-	# a case would tend to support setf rather than setaf.)
-	color_prompt=yes
-    else
-	color_prompt=
+    	# We have color support; assume it's compliant with Ecma-48
+    	# (ISO/IEC-6429). (Lack of such support is extremely rare, and such
+    	# a case would tend to support setf rather than setaf.)
+    	color_prompt=yes
+        else
+    	color_prompt=
     fi
 fi
 
@@ -63,23 +63,23 @@ fi
 #fi
 
 ##-- Ajout Openstack d'Infomaniak
-# like git ps1 for openstack
+## like git ps1 for openstack
 __openstack_ps1()
 {
     if [ -n "$OS_PROJECT_NAME" ] && [ -n "$OS_PASSWORD" ]; then
-    (echo $OS_AUTH_URL | grep -q infomaniak.cloud) && local cluster=$(echo $OS_AUTH_URL | sed 's/.*api.\([^ ]*\).infomaniak.*/\1/')
-    [ -z "$cluster" ] && cluster="openstack"
+        (echo $OS_AUTH_URL | grep -q infomaniak.cloud) && local cluster=$(echo $OS_AUTH_URL | sed 's/.*api.\([^ ]*\).infomaniak.*/\1/')
+        [ -z "$cluster" ] && cluster="openstack"
         printf -- "%s" " ($cluster|$OS_PROJECT_NAME)"
     fi
 }
-## PS1='${debian_chroot:+($debian_chroot)}\u@\h:\w\[\e[38;5;208m\]$(__openstack_ps1)\[\e[38;5;2m\]$(__git_ps1)\[\e[38;1;2m\]\$\[\e[0m\] '
+#PS1='${debian_chroot:+($debian_chroot)}\u@\h:\w\[\e[38;5;208m\]$(__openstack_ps1)\[\e[38;5;2m\]$(__git_ps1)\[\e[38;1;2m\]\$\[\e[0m\] '
 ##-- fin ajoute Openstack d'Infomaniak
 
 ##--- Ajout de Parrot OS ---
 if [ "$color_prompt" = yes ]; then
-    PS1="\[\033[0;31m\]\342\224\214\342\224\200\$([[ \$? != 0 ]] && echo \"[\[\033[0;31m\]\342\234\227\[\033[0;37m\]]\342\224\200\")[$(if [[ ${EUID} == 0 ]]; then echo '\[\033[01;31m\]root\[\033[01;33m\]@\[\033[01;96m\]\h'; else echo '\[\033[0;39m\]\u\[\033[01;33m\]@\[\033[01;96m\]\h'; fi)\[\033[0;31m\]]\342\224\200[\[\033[0;32m\]\w\[\033[0;31m\]]\[\033[01;33m\]\$(__openstack_ps1)\[\033[0;39m\] \n\[\033[0;31m\]\342\224\224\342\224\200\342\224\200\342\225\274 \[\033[0m\]\[\e[01;33m\]\\$\[\e[0m\] "
+    PS1="\[\033[0;31m\]\342\224\214\342\224\200\$([[ \$? != 0 ]] && echo \"[\[\033[0;31m\]\342\234\227\[\033[0;37m\]]\342\224\200\")[$(if [[ ${EUID} == 0 ]]; then echo '\[\033[01;31m\]root\[\033[01;33m\]@\[\033[01;96m\]\h'; else echo '\[\033[0;39m\]\u\[\033[01;33m\]@\[\033[01;96m\]\h'; fi)\[\033[0;31m\]]\342\224\200[\[\033[0;32m\]\w\[\033[0;31m\]]\[\033[01;33m\]\$(__openstack_ps1)\[\e[38;5;2m\]$(__git_ps1)\[\033[0;39m\] \n\[\033[0;31m\]\342\224\224\342\224\200\342\224\200\342\225\274 \[\033[0m\]\[\e[01;33m\]\\$\[\e[0m\] "
 else
-    PS1='┌──[\u@\h]─[\w]$(__openstack_ps1)\n└──╼ \$ '
+    PS1='┌──[\u@\h]─[\w]$(__openstack_ps1)\[\e[38;5;2m\]$(__git_ps1)\n└──╼ \$ '
 fi
 
 # Set 'man' colors
