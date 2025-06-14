@@ -80,24 +80,8 @@ fi
 #RESET='\e[0m'         # Text Reset
 
 
-#if [ "$color_prompt" = yes ]; then
-#    PS1='${debian_chroot:+($debian_chroot)}\[\033[01;32m\]\u@\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]\$ '
-#else
-#    PS1='${debian_chroot:+($debian_chroot)}\u@\h:\w\$ '
-#fi
-
-#parse_git_branch() {
-#  if git rev-parse --is-inside-work-tree &> /dev/null; then
-#    local BRANCH=$(git symbolic-ref --short HEAD 2> /dev/null)
-#    if [[ -n "$BRANCH" ]]; then
-#      echo "($BRANCH)"
-#    fi
-#  else
-#    return 0  # Ne rien faire si on n'est pas dans un dépôt Git
-#  fi
-#}
 parse_git_branch() {
-     git branch 2> /dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/ (\1)/'
+    git rev-parse --abbrev-ref HEAD 2>/dev/null
 }
 
 ##-- Ajout Openstack d'Infomaniak
@@ -110,30 +94,36 @@ __openstack_ps1()
         printf -- "%s" " ($cluster|$OS_PROJECT_NAME)"
     fi
 }
-#PS1='${debian_chroot:+($debian_chroot)}\u@\h:\w\[\e[38;5;208m\]$(__openstack_ps1)\[\e[38;5;2m\]$(__git_ps1)\[\e[38;1;2m\]\$\[\e[0m\] '
+#PS1='${debian_chroot:+($debian_chroot)}\u@\h:\w\[\e[38;5;208m\]$(__openstack_ps1)\[\e[38;5;2m\]$([ -n "$(parse_git_branch)" ] && echo " ($(parse_git_branch))")\[\e[38;1;2m\]\$\[\e[0m\] '
 ##-- fin ajoute Openstack d'Infomaniak
 
-##--- Ajout de Parrot OS ---
 if [ "$color_prompt" = yes ]; then
-    PS1="\[\033[0;31m\]\342\224\214\342\224\200\$([[ \$? != 0 ]] && echo \"[\[\033[0;31m\]\342\234\227\[\033[0;37m\]]\342\224\200\")[$(if [[ ${EUID} == 0 ]]; then echo '\[\033[01;31m\]root\[\033[01;33m\]@\[\033[01;96m\]\h'; else echo '\[\033[0;39m\]\u\[\033[01;33m\]@\[\033[01;96m\]\h'; fi)\[\033[0;31m\]]\342\224\200[\[\033[0;32m\]\w\[\033[0;31m\]]\[\033[01;33m\]\$(__openstack_ps1)\[\e[38;5;2m\]$(parse_git_branch)\[\033[0;39m\] \n\[\033[0;31m\]\342\224\224\342\224\200\342\224\200\342\225\274 \[\033[0m\]\[\e[01;33m\]\\$\[\e[0m\] "
+    PS1='${debian_chroot:+($debian_chroot)}\[\033[01;32m\]\u@\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]$([ -n "$(parse_git_branch)" ] && echo " ($(parse_git_branch))") \$ '
 else
-    PS1='┌──[\u@\h]─[\w]$(__openstack_ps1)\[\e[38;5;2m\]$(parse_git_branch)\n└──╼ \$ '
+    PS1='${debian_chroot:+($debian_chroot)}\u@\h:\w$([ -n "$(parse_git_branch)" ] && echo " ($(parse_git_branch))") \$ '
 fi
 
+##--- Ajout de Parrot OS ---
+#if [ "$color_prompt" = yes ]; then
+#    PS1="\[\033[0;31m\]\342\224\214\342\224\200\$([[ \$? != 0 ]] && echo \"[\[\033[0;31m\]\342\234\227\[\033[0;37m\]]\342\224\200\")[$(if [[ ${EUID} == 0 ]]; then echo '\[\033[01;31m\]root\[\033[01;33m\]@\[\033[01;96m\]\h'; else echo '\[\033[0;39m\]\u\[\033[01;33m\]@\[\033[01;96m\]\h'; fi)\[\033[0;31m\]]\342\224\200[\[\033[0;32m\]\w\[\033[0;31m\]]\[\033[01;33m\]$(__openstack_ps1)$([ -n "$(parse_git_branch)" ] && echo " ($(parse_git_branch))")\[\e[38;5;2m\]\[\033[0;39m\] \n\[\033[0;31m\]\342\224\224\342\224\200\342\224\200\342\225\274 \[\033[0m\]\[\e[01;33m\]\\$\[\e[0m\] "
+#else
+#    PS1='\e[0m┌──[\u@\h]─[\w]$(__openstack_ps1)$([ -n "$(parse_git_branch)" ] && echo " ($(parse_git_branch))")\n└──╼ \$ '
+#fi
+
 # Set 'man' colors
-if [ "$color_prompt" = yes ]; then
-	man() {
-	env \
-	LESS_TERMCAP_mb=$'\e[01;31m' \
-	LESS_TERMCAP_md=$'\e[01;31m' \
-	LESS_TERMCAP_me=$'\e[0m' \
-	LESS_TERMCAP_se=$'\e[0m' \
-	LESS_TERMCAP_so=$'\e[01;44;33m' \
-	LESS_TERMCAP_ue=$'\e[0m' \
-	LESS_TERMCAP_us=$'\e[01;32m' \
-	man "$@"
-	}
-fi
+#if [ "$color_prompt" = yes ]; then
+#	man() {
+#	env \
+#	LESS_TERMCAP_mb=$'\e[01;31m' \
+#	LESS_TERMCAP_md=$'\e[01;31m' \
+#	LESS_TERMCAP_me=$'\e[0m' \
+#	LESS_TERMCAP_se=$'\e[0m' \
+#	LESS_TERMCAP_so=$'\e[01;44;33m' \
+#	LESS_TERMCAP_ue=$'\e[0m' \
+#	LESS_TERMCAP_us=$'\e[01;32m' \
+#	man "$@"
+#	}
+#fi
 ##--- fin ajout de Parrot OS ---
 
 unset color_prompt force_color_prompt
