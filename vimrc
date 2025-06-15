@@ -1,4 +1,4 @@
-" Sample initialization file for Vim.
+"--- Sample initialization file for Vim.
 
 " Enable line numbers
 "set number
