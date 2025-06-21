@@ -4,7 +4,7 @@
 "set number
 
 " Enable mouse support
-set mouse=a
+set mouse=v
 
 " Set tab size to 8 spaces
 set tabstop=8
@@ -20,7 +20,7 @@ syntax on
 
 " Set colors for the interface
 set t_Co=256 " Enable 256 colors
-highlight Normal ctermfg=white ctermbg=black
+"highlight Normal ctermfg=white ctermbg=black
 highlight LineNr ctermfg=yellow
 highlight StatusLine ctermfg=white ctermbg=blue
 highlight Error ctermfg=red
@@ -29,7 +29,7 @@ highlight Error ctermfg=red
 set ruler
 
 " Enable persistent undo
-set undofile
+"set undofile
 
 " Remember the cursor position in each file for the next editing session
 augroup remember_cursor

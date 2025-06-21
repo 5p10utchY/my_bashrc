@@ -98,7 +98,7 @@ __openstack_ps1()
 ##-- fin ajoute Openstack d'Infomaniak
 
 if [ "$color_prompt" = yes ]; then
-    PS1='${debian_chroot:+($debian_chroot)}\[\033[01;32m\]\u@\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]$([ -n "$(parse_git_branch)" ] && echo " ($(parse_git_branch))") \$ '
+    PS1='${debian_chroot:+($debian_chroot)}\[\033[01;32m\]\u@\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]\e[0;33m$([ -n "$(parse_git_branch)" ] && echo " ($(parse_git_branch))")\e[0m \$ '
 else
     PS1='${debian_chroot:+($debian_chroot)}\u@\h:\w$([ -n "$(parse_git_branch)" ] && echo " ($(parse_git_branch))") \$ '
 fi
@@ -143,10 +143,11 @@ if [ -x /usr/bin/dircolors ]; then
     alias ls='ls --color=auto'
     alias dir='dir --color=auto'
     alias vdir='vdir --color=auto'
-
     alias grep='grep --color=auto'
     alias fgrep='fgrep --color=auto'
     alias egrep='egrep --color=auto'
+    alias ip='ip --color=auto'
+    alias diff='diff --color=auto'
 fi
 
 # colored GCC warnings and errors
