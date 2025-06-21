@@ -23,7 +23,7 @@ set t_Co=256 " Enable 256 colors
 "highlight Normal ctermfg=white ctermbg=black
 highlight LineNr ctermfg=yellow
 highlight StatusLine ctermfg=white ctermbg=blue
-highlight Error ctermfg=red
+highlight Error ctermfg=white ctermbg=red
 
 " Display the cursor position in the status line
 set ruler
